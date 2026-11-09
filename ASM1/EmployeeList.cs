@@ -163,6 +163,18 @@ namespace ASM1
 
         public void searchEmployeeSalaryInRange(double minSalary, double maxSalary)
         {
+            if (minSalary < 0 || maxSalary < 0)
+            {
+                Console.WriteLine("Error: Salary range cannot be negative!");
+                return;
+            }
+
+            if (minSalary > maxSalary)
+            {
+                Console.WriteLine($"Error: Minimum salary ({minSalary:N0}) cannot be greater than maximum salary ({maxSalary:N0})!");
+                return;
+            }
+
             var foundEmployees = employees.Where(e => e.Salary >= minSalary && e.Salary <= maxSalary).ToList();
             if (foundEmployees.Count > 0)
             {
@@ -180,6 +192,18 @@ namespace ASM1
 
         public void searchEmployeeByYearlySalaryInRange(double minYearlySalary, double maxYearlySalary)
         {
+            if (minYearlySalary < 0 || maxYearlySalary < 0)
+            {
+                Console.WriteLine("Error: Yearly salary range cannot be negative!");
+                return;
+            }
+
+            if (minYearlySalary > maxYearlySalary)
+            {
+                Console.WriteLine($"Error: Minimum yearly salary ({minYearlySalary:N0}) cannot be greater than maximum yearly salary ({maxYearlySalary:N0})!");
+                return;
+            }
+
             var foundEmployees = employees.Where(e =>
             {
                 double yearlySalary = SalaryCalculator.CalculateYearlySalary(e.Salary, e.Position);
