@@ -69,41 +69,66 @@ namespace ASM1
 
                     case "4":
                         Console.Write("Nhập ID cần tìm: ");
-                        if (int.TryParse(Console.ReadLine(), out int searchId))
+                        if (int.TryParse(Console.ReadLine(), out int searchId) && searchId > 0)
                         {
                             employeeList.searchEmployeeById(searchId);
                         }
                         else
                         {
-                            Console.WriteLine("ID không hợp lệ!");
+                            Console.WriteLine("ID không hợp lệ! (Phải là số nguyên dương > 0).");
                         }
                         break;
 
                     case "5":
-                        Console.Write("Nhập Name cần tìm: ");
-                        string searchName = Console.ReadLine() ?? "";
-                        employeeList.searchEmployeeByName(searchName.Trim());
+                        while (true)
+                        {
+                            Console.Write("Nhập Name cần tìm: ");
+                            string searchName = (Console.ReadLine() ?? "").Trim();
+                            if (!string.IsNullOrEmpty(searchName))
+                            {
+                                employeeList.searchEmployeeByName(searchName);
+                                break;
+                            }
+                            Console.WriteLine("Tên tìm kiếm không được để trống!");
+                        }
                         break;
 
                     case "6":
-                        Console.Write("Nhập Position cần tìm (Manager/Developer/Tester): ");
-                        string searchPos = Console.ReadLine() ?? "";
-                        employeeList.searchEmployeeByPosition(searchPos.Trim());
+                        while (true)
+                        {
+                            Console.Write("Nhập Position cần tìm (Manager/Developer/Tester): ");
+                            string searchPos = (Console.ReadLine() ?? "").Trim();
+                            string? matchPos = Array.Find(Employee.Positions, p => p.Equals(searchPos, StringComparison.OrdinalIgnoreCase));
+                            if (matchPos != null)
+                            {
+                                employeeList.searchEmployeeByPosition(matchPos);
+                                break;
+                            }
+                            Console.WriteLine("Chức vụ không hợp lệ! Vui lòng chọn Manager, Developer hoặc Tester.");
+                        }
                         break;
 
                     case "7":
-                        Console.Write("Nhập mức lương tháng nhỏ nhất (min Salary): ");
-                        double.TryParse(Console.ReadLine(), out double minSal);
-                        Console.Write("Nhập mức lương tháng lớn nhất (max Salary): ");
-                        double.TryParse(Console.ReadLine(), out double maxSal);
+                        double minSal = ReadPositiveDouble("Nhập mức lương tháng nhỏ nhất (min Salary >= 0): ");
+                        double maxSal;
+                        while (true)
+                        {
+                            maxSal = ReadPositiveDouble("Nhập mức lương tháng lớn nhất (max Salary): ");
+                            if (maxSal >= minSal) break;
+                            Console.WriteLine($"Mức lương lớn nhất phải >= mức nhỏ nhất ({minSal:N0})!");
+                        }
                         employeeList.searchEmployeeSalaryInRange(minSal, maxSal);
                         break;
 
                     case "8":
-                        Console.Write("Nhập mức lương năm nhỏ nhất (min Yearly Salary): ");
-                        double.TryParse(Console.ReadLine(), out double minYearly);
-                        Console.Write("Nhập mức lương năm lớn nhất (max Yearly Salary): ");
-                        double.TryParse(Console.ReadLine(), out double maxYearly);
+                        double minYearly = ReadPositiveDouble("Nhập mức lương năm nhỏ nhất (min Yearly Salary >= 0): ");
+                        double maxYearly;
+                        while (true)
+                        {
+                            maxYearly = ReadPositiveDouble("Nhập mức lương năm lớn nhất (max Yearly Salary): ");
+                            if (maxYearly >= minYearly) break;
+                            Console.WriteLine($"Mức lương năm lớn nhất phải >= mức nhỏ nhất ({minYearly:N0})!");
+                        }
                         employeeList.searchEmployeeByYearlySalaryInRange(minYearly, maxYearly);
                         break;
 
@@ -127,6 +152,19 @@ namespace ASM1
                     Console.WriteLine("\nNhấn phím bất kỳ để tiếp tục...");
                     Console.ReadKey();
                 }
+            }
+        }
+
+        private static double ReadPositiveDouble(string msg)
+        {
+            while (true)
+            {
+                Console.Write(msg);
+                if (double.TryParse(Console.ReadLine(), out double v) && v >= 0)
+                {
+                    return v;
+                }
+                Console.WriteLine("Vui lòng nhập một số không âm (>= 0) hợp lệ!");
             }
         }
     }

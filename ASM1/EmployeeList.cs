@@ -10,27 +10,48 @@ namespace ASM1
     {
         private List<Employee> employees = new List<Employee>();
 
-        public void AddEmployee(Employee e)
+        public bool IsIdExisted(int id)
         {
+            return employees.Any(e => e.Id == id);
+        }
+
+        public bool AddEmployee(Employee e)
+        {
+            if (IsIdExisted(e.Id))
+            {
+                Console.WriteLine($"Error: Employee with ID {e.Id} already exists!");
+                return false;
+            }
             employees.Add(e);
+            return true;
         }
 
         public void inputEmployeeList()
         {
-            Console.Write("Enter number of employees: ");
+            Console.Write("Enter number of employees to add: ");
             if (int.TryParse(Console.ReadLine(), out int n) && n > 0)
             {
                 for (int i = 0; i < n; i++)
                 {
                     Console.WriteLine($"\n--- Input Employee #{i + 1} ---");
                     Employee e = new Employee();
-                    e.Input();
-                    AddEmployee(e);
+                    while (true)
+                    {
+                        e.Input();
+                        if (IsIdExisted(e.Id))
+                        {
+                            Console.WriteLine($"ID {e.Id} already exists in the list! Please re-enter this employee.");
+                            continue;
+                        }
+                        AddEmployee(e);
+                        Console.WriteLine("Added successfully!");
+                        break;
+                    }
                 }
             }
             else
             {
-                Console.WriteLine("Invalid number of employees.");
+                Console.WriteLine("Invalid number of employees (must be an integer > 0).");
             }
         }
 
@@ -43,6 +64,7 @@ namespace ASM1
             }
 
             string[] lines = File.ReadAllLines(filePath);
+            int addedCount = 0;
             foreach (string rawLine in lines)
             {
                 string line = rawLine.Trim();
@@ -52,23 +74,43 @@ namespace ASM1
                 if (parts.Length == 4)
                 {
                     if (int.TryParse(parts[0].Trim(), out int id) &&
-                        double.TryParse(parts[2].Trim(), out double salary))
+                        id > 0 &&
+                        double.TryParse(parts[2].Trim(), out double salary) &&
+                        salary > 0)
                     {
+                        string name = parts[1].Trim();
+                        string position = parts[3].Trim();
+
+                        string? matchPos = Array.Find(Employee.Positions, x => x.Equals(position, StringComparison.OrdinalIgnoreCase));
+                        if (matchPos == null)
+                        {
+                            Console.WriteLine($"Warning: Invalid position '{position}' on line: {line}");
+                            continue;
+                        }
+
+                        if (IsIdExisted(id))
+                        {
+                            Console.WriteLine($"Warning: Duplicate ID {id} found in file. Skipping line: {line}");
+                            continue;
+                        }
+
                         Employee e = new Employee
                         {
                             Id = id,
-                            Name = parts[1].Trim(),
+                            Name = name,
                             Salary = salary,
-                            Position = parts[3].Trim()
+                            Position = matchPos
                         };
-                        AddEmployee(e);
+                        employees.Add(e);
+                        addedCount++;
                     }
                     else
                     {
-                        Console.WriteLine($"Error parsing line: {line}");
+                        Console.WriteLine($"Error parsing line (Invalid ID or Salary): {line}");
                     }
                 }
             }
+            Console.WriteLine($"Loaded {addedCount} employee(s) from file.");
         }
 
         public void searchEmployeeByName(string name)
@@ -124,7 +166,7 @@ namespace ASM1
             var foundEmployees = employees.Where(e => e.Salary >= minSalary && e.Salary <= maxSalary).ToList();
             if (foundEmployees.Count > 0)
             {
-                Console.WriteLine($"Found {foundEmployees.Count} employee(s) with salary in range {minSalary} - {maxSalary}:");
+                Console.WriteLine($"Found {foundEmployees.Count} employee(s) with salary in range {minSalary:N0} - {maxSalary:N0}:");
                 foreach (var emp in foundEmployees)
                 {
                     emp.Display(SalaryCalculator.CalculateYearlySalary);
@@ -132,7 +174,7 @@ namespace ASM1
             }
             else
             {
-                Console.WriteLine($"No employee found with salary in range {minSalary} - {maxSalary}.");
+                Console.WriteLine($"No employee found with salary in range {minSalary:N0} - {maxSalary:N0}.");
             }
         }
 
@@ -145,7 +187,7 @@ namespace ASM1
             }).ToList();
             if (foundEmployees.Count > 0)
             {
-                Console.WriteLine($"Found {foundEmployees.Count} employee(s) with yearly salary in range {minYearlySalary} - {maxYearlySalary}:");
+                Console.WriteLine($"Found {foundEmployees.Count} employee(s) with yearly salary in range {minYearlySalary:N0} - {maxYearlySalary:N0}:");
                 foreach (var emp in foundEmployees)
                 {
                     emp.Display(SalaryCalculator.CalculateYearlySalary);
@@ -153,7 +195,7 @@ namespace ASM1
             }
             else
             {
-                Console.WriteLine($"No employee found with yearly salary in range {minYearlySalary} - {maxYearlySalary}.");
+                Console.WriteLine($"No employee found with yearly salary in range {minYearlySalary:N0} - {maxYearlySalary:N0}.");
             }
         }
 

@@ -25,12 +25,9 @@ namespace ASM1
 
         public void Input()
         {
-            Id = ReadInt("Input Id: ");
-
-            Console.Write("Input Name: ");
-            Name = (Console.ReadLine() ?? "").Trim();
-
-            Salary = ReadDouble("Input Salary (per month): ");
+            Id = ReadInt("Input Id (> 0): ");
+            Name = ReadValidName("Input Name: ");
+            Salary = ReadDouble("Input Salary (per month > 0): ");
 
             while (true)
             {
@@ -42,7 +39,7 @@ namespace ASM1
                     Position = match;
                     break;
                 }
-                Console.WriteLine("Invalid position!");
+                Console.WriteLine("Invalid position! Must be Manager, Developer, or Tester.");
             }
         }
         public void Display(SalaryCaculation delObj)
@@ -57,8 +54,22 @@ namespace ASM1
             while (true)
             {
                 Console.Write(msg);
-                if (int.TryParse(Console.ReadLine(), out int v)) return v;
-                Console.WriteLine("Wrong format! Please input an integer.");
+                if (int.TryParse(Console.ReadLine(), out int v) && v > 0) return v;
+                Console.WriteLine("Wrong format! Please input a positive integer (> 0).");
+            }
+        }
+
+        private static string ReadValidName(string msg)
+        {
+            while (true)
+            {
+                Console.Write(msg);
+                string input = (Console.ReadLine() ?? "").Trim();
+                if (!string.IsNullOrEmpty(input) && input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
+                {
+                    return input;
+                }
+                Console.WriteLine("Wrong format! Name must not be empty and can only contain letters and spaces.");
             }
         }
 
@@ -67,8 +78,8 @@ namespace ASM1
             while (true)
             {
                 Console.Write(msg);
-                if (double.TryParse(Console.ReadLine(), out double v) && v >= 0) return v;
-                Console.WriteLine("Wrong format! Please input a non-negative number.");
+                if (double.TryParse(Console.ReadLine(), out double v) && v > 0) return v;
+                Console.WriteLine("Wrong format! Please input a positive number (> 0).");
             }
         }
     }
