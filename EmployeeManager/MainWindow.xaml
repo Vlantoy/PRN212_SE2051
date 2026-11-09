@@ -1,0 +1,166 @@
+<Window x:Class="EmployeeManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Employee Management - PRN212" Height="620" Width="750"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" FontSize="14"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="110"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#0078D7"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="4" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#005A9E"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#004578"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#5C6B73"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4A565C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#D83B01"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#A80000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <!-- Top Form & Action Buttons (matching sketch) -->
+            <RowDefinition Height="Auto"/>
+            <!-- Spacer/Divider -->
+            <RowDefinition Height="15"/>
+            <!-- Bottom DataGrid -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Area: Inputs (Left) and Buttons (Right) -->
+        <Border Grid.Row="0" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="6" Padding="15" Background="#F9FAFB">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Left: Form inputs -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Gap -->
+                    <ColumnDefinition Width="30"/>
+                    <!-- Right: Action buttons -->
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Form Inputs -->
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Id -->
+                    <Label Grid.Row="0" Grid.Column="0" Content="Id :" FontWeight="Bold" VerticalAlignment="Center" Margin="0,3"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtId" Margin="0,4" Padding="6,4" VerticalAlignment="Center" KeyDown="txtId_KeyDown"/>
+
+                    <!-- First -->
+                    <Label Grid.Row="1" Grid.Column="0" Content="First :" FontWeight="Bold" VerticalAlignment="Center" Margin="0,3"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtFirstName" Margin="0,4" Padding="6,4" VerticalAlignment="Center"/>
+
+                    <!-- Mid -->
+                    <Label Grid.Row="2" Grid.Column="0" Content="Mid :" FontWeight="Bold" VerticalAlignment="Center" Margin="0,3"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtMiddleName" Margin="0,4" Padding="6,4" VerticalAlignment="Center"/>
+
+                    <!-- Last -->
+                    <Label Grid.Row="3" Grid.Column="0" Content="Last :" FontWeight="Bold" VerticalAlignment="Center" Margin="0,3"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtLastName" Margin="0,4" Padding="6,4" VerticalAlignment="Center"/>
+
+                    <!-- Dept (Department Name dropdown / editable search) -->
+                    <Label Grid.Row="4" Grid.Column="0" Content="Dept :" FontWeight="Bold" VerticalAlignment="Center" Margin="0,3"/>
+                    <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbDept" Margin="0,4" Padding="6,4" 
+                              IsEditable="True"
+                              DisplayMemberPath="DepartmentName" SelectedValuePath="DepartmentId"
+                              VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Right Action Buttons -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <Button x:Name="btnAdd" Content="Add" Click="btnAdd_Click"/>
+                    <Button x:Name="btnUpdate" Content="Update" Click="btnUpdate_Click"/>
+                    <Button x:Name="btnDelete" Content="Delete" Click="btnDelete_Click" Style="{StaticResource DangerButton}"/>
+                    <Button x:Name="btnSearch" Content="Search" Click="btnSearch_Click" Style="{StaticResource SecondaryButton}"/>
+                    <Button x:Name="btnReset" Content="Reset" Click="btnReset_Click" Style="{StaticResource SecondaryButton}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Bottom: DataGrid -->
+        <Border Grid.Row="2" BorderBrush="#D1D5DB" BorderThickness="1" CornerRadius="6" Background="White">
+            <DataGrid x:Name="dgEmployees" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
+                      IsReadOnly="True" 
+                      SelectionMode="Single"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#E5E7EB"
+                      RowHeight="32"
+                      AlternatingRowBackground="#F9FAFB"
+                      SelectionChanged="dgEmployees_SelectionChanged">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Height" Value="36"/>
+                        <Setter Property="Background" Value="#F3F4F6"/>
+                        <Setter Property="Foreground" Value="#111827"/>
+                        <Setter Property="Padding" Value="8,0"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding EmployeeId}" Width="70"/>
+                    <DataGridTextColumn Header="First" Binding="{Binding FirstName}" Width="1.2*"/>
+                    <DataGridTextColumn Header="Mid" Binding="{Binding MiddleName}" Width="*"/>
+                    <DataGridTextColumn Header="Last" Binding="{Binding LastName}" Width="1.2*"/>
+                    <DataGridTextColumn Header="Gender" Binding="{Binding Gender}" Width="85"/>
+                    <DataGridTextColumn Header="Dept" Binding="{Binding Department.DepartmentName}" Width="1.3*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Window>

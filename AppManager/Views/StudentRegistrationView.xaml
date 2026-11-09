@@ -1,0 +1,103 @@
+<UserControl x:Class="AppManager.Views.StudentRegistrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30,20" MaxWidth="650" HorizontalAlignment="Center">
+            <!-- Header -->
+            <TextBlock Text="ĐĂNG KÝ THÔNG TIN SINH VIÊN" 
+                       FontSize="20" FontWeight="Bold" Foreground="#1E293B"
+                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
+            <Separator Margin="0,0,0,20"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Họ tên -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Họ tên:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtHoTen" Margin="0,6" Padding="6,4" Height="30" VerticalContentAlignment="Center"/>
+
+                <!-- Mã sinh viên -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Mã sinh viên:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtMaSV" Margin="0,6" Padding="6,4" Height="30" VerticalContentAlignment="Center"/>
+
+                <!-- Giới tính -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Giới tính:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,6">
+                    <RadioButton x:Name="rbNam" Content="Nam" Margin="0,0,30,0" VerticalAlignment="Center" FontSize="13"/>
+                    <RadioButton x:Name="rbNu" Content="Nữ" VerticalAlignment="Center" FontSize="13"/>
+                </StackPanel>
+
+                <!-- Ngày sinh -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Ngày sinh:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <DatePicker Grid.Row="3" Grid.Column="1" x:Name="dpNgaySinh" Margin="0,6" Padding="4" Height="30"/>
+
+                <!-- Khoa -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Khoa:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cbKhoa" Margin="0,6" Padding="6,4" Height="30" VerticalContentAlignment="Center" SelectedIndex="0">
+                    <ComboBoxItem Content="CNTT"/>
+                    <ComboBoxItem Content="Kinh tế"/>
+                    <ComboBoxItem Content="Ngoại ngữ"/>
+                    <ComboBoxItem Content="Điện - Điện tử"/>
+                    <ComboBoxItem Content="Đồ họa"/>
+                </ComboBox>
+
+                <!-- Sở thích -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Sở thích:" VerticalAlignment="Top" Margin="0,6,0,0" FontWeight="SemiBold"/>
+                <StackPanel Grid.Row="5" Grid.Column="1" Margin="0,6">
+                    <CheckBox x:Name="chkLapTrinh" Content="Lập trình" Margin="0,4" FontSize="13"/>
+                    <CheckBox x:Name="chkDocSach" Content="Đọc sách" Margin="0,4" FontSize="13"/>
+                    <CheckBox x:Name="chkTheThao" Content="Thể thao" Margin="0,4" FontSize="13"/>
+                </StackPanel>
+
+                <!-- Mức độ yêu thích -->
+                <Label Grid.Row="6" Grid.Column="0" Content="Mức độ yêu thích:" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <Grid Grid.Row="6" Grid.Column="1" Margin="0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="sliderMucDo" Minimum="0" Maximum="100" Value="50" IsSnapToTickEnabled="True" TickFrequency="1" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding ElementName=sliderMucDo, Path=Value}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14" Foreground="#2563EB"/>
+                </Grid>
+            </Grid>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,20">
+                <Button x:Name="btnDangKy" Content="ĐĂNG KÝ" Width="120" Height="36" Margin="0,0,20,0" FontWeight="Bold" Background="#2563EB" Foreground="White" Click="btnDangKy_Click" Cursor="Hand"/>
+                <Button x:Name="btnXoa" Content="LÀM MỚI" Width="120" Height="36" FontWeight="Bold" Background="#64748B" Foreground="White" Click="btnXoa_Click" Cursor="Hand"/>
+            </StackPanel>
+
+            <Separator Margin="0,10,0,20"/>
+
+            <!-- Result Section -->
+            <Border x:Name="borderResult" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="20" Background="#F8FAFC" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="THÔNG TIN SINH VIÊN ĐÃ ĐĂNG KÝ" FontSize="15" FontWeight="Bold" Margin="0,0,0,12" Foreground="#0F172A"/>
+                    <TextBlock x:Name="lblHoTenResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblMaSVResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblGioiTinhResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblNgaySinhResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblKhoaResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblSoThichResult" Margin="0,4" FontSize="13"/>
+                    <TextBlock x:Name="lblMucDoResult" Margin="0,4" FontSize="13"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

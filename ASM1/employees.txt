@@ -1,0 +1,3 @@
+1|Hung|1000|Manager
+2|Hoa|900|Developer
+3|Nhat|2000|Boss

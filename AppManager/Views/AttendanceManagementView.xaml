@@ -1,0 +1,77 @@
+<UserControl x:Class="AppManager.Views.AttendanceManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="850"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <!-- Course -->
+            <RowDefinition Height="Auto"/>
+            <!-- Schedule -->
+            <RowDefinition Height="Auto"/>
+            <!-- Table (DataGrid) -->
+            <RowDefinition Height="*"/>
+            <!-- Save Button -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Course Selector -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Course:" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="14"/>
+            <ComboBox Grid.Column="1" x:Name="cbCourse" Height="32" VerticalContentAlignment="Center"
+                      SelectionChanged="cbCourse_SelectionChanged"/>
+        </Grid>
+
+        <!-- Schedule Selector -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Schedule:" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="14"/>
+            <ComboBox Grid.Column="1" x:Name="cbSchedule" Height="32" VerticalContentAlignment="Center"
+                      SelectionChanged="cbSchedule_SelectionChanged"/>
+        </Grid>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="2" x:Name="dgAttendance" Margin="0,0,0,15"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  GridLinesVisibility="All"
+                  RowHeight="32"
+                  FontSize="13"
+                  SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã SV" Binding="{Binding RollNumber}" Width="120" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Tên sinh viên" Binding="{Binding FullName}" Width="*" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Điểm danh" Width="130">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="85">
+                                <CheckBox IsChecked="{Binding IsPresent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                          Content="{Binding StatusText}" 
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Ghi chú" Binding="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Save Button -->
+        <Button Grid.Row="3" x:Name="btnSave" Content="Save Changes" Width="120" Height="34" 
+                HorizontalAlignment="Right" Margin="0,0,5,0"
+                Background="#2563EB" Foreground="White" FontWeight="Bold"
+                Click="btnSave_Click" Cursor="Hand"/>
+    </Grid>
+</UserControl>

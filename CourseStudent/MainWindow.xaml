@@ -1,0 +1,90 @@
+<Window x:Class="CourseStudent.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CourseStudent"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="620" Width="820"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15" Loaded="frMain_Loaded">
+        <Grid.RowDefinitions>
+            <!-- GroupBox Thông tin sinh viên -->
+            <RowDefinition Height="Auto"/>
+            <!-- Hàng nút thao tác và tìm kiếm -->
+            <RowDefinition Height="Auto"/>
+            <!-- Bảng dữ liệu DataGrid -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- GroupBox Thông tin sinh viên -->
+        <GroupBox Grid.Row="0" Header="Thông tin sinh viên" Margin="0,0,0,10" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Row 0: Student ID & Roll No -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Student ID:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtStudentId" Height="26" Margin="0,4" VerticalContentAlignment="Center" IsReadOnly="True" Background="#F0F0F0"/>
+
+                <Label Grid.Row="0" Grid.Column="3" Content="Roll No:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="4" x:Name="txtRollNo" Height="26" Margin="0,4" VerticalContentAlignment="Center"/>
+
+                <!-- Row 1: First Name & Last Name -->
+                <Label Grid.Row="1" Grid.Column="0" Content="First Name:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtFirstName" Height="26" Margin="0,4" VerticalContentAlignment="Center"/>
+
+                <Label Grid.Row="1" Grid.Column="3" Content="Last Name:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="4" x:Name="txtLastName" Height="26" Margin="0,4" VerticalContentAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Hàng nút: Thêm, Sửa, Xóa, Làm mới và ô Tìm kiếm -->
+        <Grid Grid.Row="1" Margin="0,5,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Các nút thao tác bên trái -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button x:Name="btnThem" Content="Thêm" Width="75" Height="28" Margin="0,0,10,0" Click="btnThem_Click"/>
+                <Button x:Name="btnSua" Content="Sửa" Width="75" Height="28" Margin="0,0,10,0" Click="btnSua_Click"/>
+                <Button x:Name="btnXoa" Content="Xóa" Width="75" Height="28" Margin="0,0,10,0" Click="btnXoa_Click"/>
+                <Button x:Name="btnLamMoi" Content="Làm mới" Width="75" Height="28" Margin="0,0,10,0" Click="btnLamMoi_Click"/>
+            </StackPanel>
+
+            <!-- Ô tìm kiếm và nút Tìm kiếm bên phải -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox x:Name="txtSearch" Width="180" Height="28" Margin="0,0,8,0" VerticalContentAlignment="Center"/>
+                <Button x:Name="btnTimKiem" Content="Tìm kiếm" Width="85" Height="28" Click="btnTimKiem_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Bảng danh sách sinh viên -->
+        <DataGrid Grid.Row="2" x:Name="grid1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  GridLinesVisibility="All"
+                  SelectionChanged="grid1_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="StudentId" Binding="{Binding StudentID}" Width="90"/>
+                <DataGridTextColumn Header="RollNo" Binding="{Binding RollNo}" Width="110"/>
+                <DataGridTextColumn Header="FirstName" Binding="{Binding FirstName}" Width="140"/>
+                <DataGridTextColumn Header="LastName" Binding="{Binding LastName}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

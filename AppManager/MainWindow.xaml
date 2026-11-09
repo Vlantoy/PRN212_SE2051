@@ -1,0 +1,69 @@
+<Window x:Class="AppManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PRN212 - SE2051 Suite (4-in-1)" 
+        Height="700" Width="1050"
+        MinHeight="550" MinWidth="850"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" FontSize="13">
+
+    <Window.Resources>
+        <!-- Simple Top Nav Button Style -->
+        <Style x:Key="TopTabBtn" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#E2E8F0"/>
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter TargetName="bd" Property="Background" Value="#2563EB"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#2563EB"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <!-- Top Simple Navigation Bar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content View Area -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Simple Navigation Bar -->
+        <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="15,10">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="btnTab1" Content="1. Đăng ký SV" Style="{StaticResource TopTabBtn}" Tag="Active" Click="btnTab1_Click"/>
+                <Button x:Name="btnTab2" Content="2. Quản lý SV (CSDL)" Style="{StaticResource TopTabBtn}" Click="btnTab2_Click"/>
+                <Button x:Name="btnTab3" Content="3. Quản lý Nhân viên" Style="{StaticResource TopTabBtn}" Click="btnTab3_Click"/>
+                <Button x:Name="btnTab4" Content="4. Điểm danh SV" Style="{StaticResource TopTabBtn}" Click="btnTab4_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ContentControl Grid.Row="1" x:Name="mainContent"/>
+    </Grid>
+</Window>
